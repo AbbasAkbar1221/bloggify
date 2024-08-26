@@ -9,6 +9,7 @@ const BlogPost = require('../models/blogpost');
 const blog_index_get = (req, res) => {
     const userIdFromToken = res.locals.user.id;
     BlogPost.find({author:userIdFromToken}).sort({ createdAt: -1 })
+    .populate('author' , 'name-_id')
         .then((result) => {
             res.render('blogs/blogs', { title: 'All blogs', blogs: result });
         })
@@ -22,7 +23,7 @@ const blog_index_get = (req, res) => {
 // blog_id_get
 const blog_id_get = (req, res) => {
     BlogPost.findById(req.params.id)
-        // .populate('author')
+        .populate('author' , 'name-_id')
         .then((blog) => {
             res.render('blogs/single-blog', { title: blog.title, blog });
         })
