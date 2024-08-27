@@ -29,7 +29,14 @@ router.post('/signup', (req, res) => {
     // 1. Extract the name, email and password from the request body
     const obj = req.body;
     console.log(obj);
-    obj.password = hashPassword(obj.password);
+    hashPassword(obj.password)
+    .then((hashedPassword) => {
+        obj.password = hashedPassword;
+    })
+    .catch((err) => {
+        console.log(err);
+        res.redirect('/auth/signup?error=Error creating user');
+    });
 
     // 2. Create a new user in the database
     User.create(obj)
