@@ -31,6 +31,9 @@ async function comparePassword(plainPasswordFromLogin, hashedPwdFromDb) {
 }
 comparePassword('password123', hashedPwdFromDb);
 
+
+module.exports = {hashPassword , comparePassword};
+
 // 1.1 Use bcrypt.genSalt(10) to generate a salt // returns a promise
 // 1.2 Use bcrypt.hash(password, salt) to generate a hashed password // returns a promise
 // 1.3 Return the hashed password

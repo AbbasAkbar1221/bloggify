@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const User = require('../../models/user');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const {hashPassword, comparePassword} = require('../../utils/passBcrypt');
 
 const router = Router();
 
@@ -28,6 +29,8 @@ router.post('/signup', (req, res) => {
     // 1. Extract the name, email and password from the request body
     const obj = req.body;
     console.log(obj);
+    obj.password = hashPassword(obj.password);
+
     // 2. Create a new user in the database
     User.create(obj)
         .then(user => {
@@ -65,7 +68,8 @@ router.post('/login', (req, res) => {
                 // send an error message with status code 400 (Bad Request)
                 return res.redirect('/auth//login?error=User not found');
             }
-            else if (user.password !== password) {
+            // else if (user.password !== password) {
+            else if(comparePassword(password, user.password) === false){
                 // If password is incorrect,
                 // send an error message with status code 400 (Bad Request)
                 return res.redirect('/auth/login?error=Incorrect password');
